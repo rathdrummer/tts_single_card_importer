@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Single Card TTS Importer</title>
+</head>
+
+<body>
+
+<table>
+  <tr>
+    <b>TTS Single Card Importer</b>   by pizza
+  </tr>
+  <tr>
+    <th>Front image url: </th>
+    <th><input type="text" name="fronturl" value="" id="fronturl"></th>
+  </tr>
+  <tr>
+    <th>Back image url: </th>
+    <th><input type="text" name="backurl" value="" id="backurl"></th>
+    <th><button type="button" name="button" id="mtgbutton">mtg</button></th>
+    <th><button type="button" name="button" id="ygobutton">ygo</button></th>
+  </tr>
+  <tr>
+    <th>Card name: </th>
+    <th><input type="text" name="backurl" value="" id="cardname"></th>
+  </tr>
+</table>
+
+  <button type="button" name="button" id="downloadbutton">Download JSON</button>
+  <div id="container">
+  </div>
+
+</body>
+
+<script type="text/javascript">
+
+  document.getElementById("mtgbutton").onclick = function () {
+    document.getElementById("backurl").value = "https://www.frogtown.me/images/gatherer/CardBack.jpg";
+  };
+
+  document.getElementById("ygobutton").onclick = function () {
+    document.getElementById("backurl").value = "https://i.imgur.com/UjbK2Wb.png";
+  };
+
+
+  document.getElementById("downloadbutton").onclick = function () {
+
+    var card = new Object();
+
+    card.name="Card";
+
+    var customDeck_1 = new Object();
+    customDeck_1.FaceURL = document.getElementById("fronturl").value;
+    customDeck_1.BackURL = document.getElementById("backurl").value;
+    customDeck_1.NumHeight = 1;
+    customDeck_1.NumWidth = 1;
+    customDeck_1.BackIsHidden = true;
+
+    var customDeck = {
+
+      "1" : customDeck_1
+    }
+
+    card.CustomDeck = customDeck;
+
+    var transform = {
+
+    "posX" : 4.4,
+    "posY" : 1,
+    "posZ" : 0,
+    "rotX" : 0,
+    "rotY" : 180,
+    "rotZ" : 0,
+    "scaleX" : 1,
+    "scaleY" : 1,
+    "scaleZ" : 1
+    };
+
+    card.Transform = transform;
+
+    card.CardID = 100
+    card.Nickname = document.getElementById("cardname").value;
+
+    var obj = [];
+    obj.push(card);
+
+    var json = new Object();
+    json.ObjectStates = obj
+
+
+    var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));
+    var a = document.createElement('a');
+    a.href = 'data:' + data;
+    if (document.getElementById("cardname").value === "") {
+      a.download = "card.json";
+    }
+    else {
+      a.download = document.getElementById("cardname").value + '.json';
+    }
+    a.innerHTML = 'download JSON';
+
+    var container = document.getElementById('container');
+    container.appendChild(a);
+    a.click();
+
+    a.remove();
+  };
+
+</script>
